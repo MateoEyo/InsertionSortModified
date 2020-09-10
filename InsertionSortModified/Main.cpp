@@ -5,11 +5,13 @@ Insertion Sort modified to use binary search instead of linear search when inser
 #include <iostream>
 #include <string>
 #include <vector>
+#include <math.h>
+#include <stdlib.h>
 using namespace std;
 
 int getTotal();
 vector<int> insertionSort(vector<int> toSort);
-void binarySearch(vector<int> array, int upper, int value, int temp);
+vector<int> binarySearch(vector<int> toSort);
 
 // Begin the program
 int main() {
@@ -17,7 +19,8 @@ int main() {
     bool keepGoing = false;
     int total = 0;
     vector<int> preSortArray;
-    vector<int> postSortArray;
+    vector<int> sortedInsertion;
+    vector<int> sortedBinary;
 
     cout << "*** Welcome to Insertion Sort! This insertion sort will look at integers between 1 and 1,000. ***" << endl;
 
@@ -29,18 +32,23 @@ int main() {
         }
         else {
             preSortArray.resize(total);
-            postSortArray.resize(total);
+            sortedInsertion.resize(total);
             for (int i = 0; i < total; i++) {
+                srand(total);
                 preSortArray[i] = (rand() % 1000) + 1;
-                cout << preSortArray[i] << endl;
             }
         }
         
-        postSortArray = insertionSort(preSortArray);
-        for (int i = 0; i < total; i++) {
-            cout << postSortArray[i] << endl;
+        sortedInsertion = insertionSort(preSortArray);
+        sortedBinary = binarySearch(preSortArray);
+        for (int i = 0; i < preSortArray.size(); i++) {
+            cout << preSortArray[i] << endl;
         }
-        postSortArray.clear();
+        for (int i = 0; i < sortedBinary.size(); i++) {
+            cout << sortedBinary[i] << endl;
+        }
+
+        sortedInsertion.clear();
         preSortArray.clear();
 
         cout << "Type 1 to continue sorting with a new array or 0 to stop. ";
@@ -95,15 +103,30 @@ vector<int> insertionSort(vector<int> toSort) {
     return toSort;
 }
 
-// Traverse subarray to insert element into already sorted subarray
-void binarySearch(vector<int> array, int upper, int value, int temp) {
+// Insertion sort using binary search instead of a linear search
+vector<int> binarySearch(vector<int> toSort) {
 
-    bool isSorted = false;
-    int lower = 0;
+    int temp;
 
-    while (isSorted) {
-        if (upper < lower) {
-            
+    for (size_t i = 1; i < toSort.size(); i++) {
+
+        int lower = 0;
+        int upper = i - 1; 
+        int midpoint = 0;
+
+        while (lower < i) {
+
+            midpoint = floor(lower + (upper - lower) / 2);
+
+            if (toSort[midpoint] < toSort[i]) { lower = midpoint + 1; }
+            if (toSort[midpoint] > toSort[i]) { upper = midpoint + 1; }
+            if (toSort[midpoint] == toSort[i]) { break; }
         }
+
+        temp = toSort[lower];
+        toSort[lower] = toSort[i];
+        toSort[i] = temp;
     }
+
+    return toSort;
 }
