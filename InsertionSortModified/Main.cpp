@@ -11,7 +11,8 @@ using namespace std;
 
 int getTotal();
 vector<int> insertionSort(vector<int> toSort);
-vector<int> binarySearch(vector<int> toSort);
+vector<int> insertionSortBinary(vector<int> toSort);
+int binarySearch(vector<int> toSort, int value, int lower, int higher);
 
 // Begin the program
 int main() {
@@ -31,16 +32,16 @@ int main() {
             exit(EXIT_FAILURE);
         }
         else {
+            srand(total);
             preSortArray.resize(total);
             sortedInsertion.resize(total);
             for (int i = 0; i < total; i++) {
-                srand(total);
                 preSortArray[i] = (rand() % 1000) + 1;
             }
         }
         
         sortedInsertion = insertionSort(preSortArray);
-        sortedBinary = binarySearch(preSortArray);
+        sortedBinary = insertionSortBinary(preSortArray);
         for (int i = 0; i < preSortArray.size(); i++) {
             cout << preSortArray[i] << endl;
         }
@@ -86,47 +87,72 @@ int getTotal() {
 // Utilize insertion sort to sort given array
 vector<int> insertionSort(vector<int> toSort) {
 
-    int temp;
+    int value;
     int check;
 
     for (size_t i = 1; i < toSort.size(); i++) {
-        temp = toSort[i];
+        value = toSort[i];
         check = i - 1;
 
-        while ((check >= 0) && toSort[check] > temp) {
+        while ((check >= 0) && toSort[check] > value) {
             toSort[check + 1] = toSort[check];
-            check = check - 1;
+            check--;
         }
-        toSort[check + 1] = temp;
+        toSort[check + 1] = value;
     }
 
     return toSort;
 }
 
-// Insertion sort using binary search instead of a linear search
-vector<int> binarySearch(vector<int> toSort) {
 
-    int temp;
+
+// Insertion sort using binary search instead of a linear search
+vector<int> insertionSortBinary(vector<int> toSort) {
+
+    int value;
+    int check;
+    int location;
 
     for (size_t i = 1; i < toSort.size(); i++) {
+        value = toSort[i];
+        check = i - 1;
+        
+        // Call a binary search that will run recursively to find the location to insert 'value'
+        location = binarySearch(toSort, value, 0, check);
 
-        int lower = 0;
-        int upper = i - 1; 
-        int midpoint = 0;
-
-        while (lower < i) {
-
-            midpoint = floor(lower + (upper - lower) / 2);
-
-            if (toSort[midpoint] < toSort[i]) { lower = midpoint + 1; }
-            if (toSort[midpoint] > toSort[i]) { upper = midpoint + 1; }
-            if (toSort[midpoint] == toSort[i]) { break; }
+        // Shift all elements after the location found in binary search to allow the value to be placed
+        while (check >= location) {
+            toSort[check + 1] = toSort[check];
+            check--;
         }
-
-        temp = toSort[lower];
-        toSort[lower] = toSort[i];
-        toSort[i] = temp;
+        toSort[check + 1] = value;
     }
 
     return toSort;
+}
+
+// Binary search function that finds the position where the 'value' should be inserted recursively
+int binarySearch(vector<int> toSort, int value, int lower, int higher) {
+
+    int midpoint = 0;
+
+    while (lower <= higher) {
+        if (higher == lower) {
+            // Working on this project helped me find out about the "ternary operator" that is in use below
+            return (value > toSort[lower]) ? (lower + 1) : lower;
+        }
+
+        midpoint = floor((lower + higher) / 2);
+
+        if (value == toSort[midpoint]) {
+            return midpoint + 1;
+        }
+
+        if (value > toSort[midpoint]) {
+            lower = midpoint + 1;
+        }
+        else {
+            higher = midpoint - 1;
+        }
+    }
 }
