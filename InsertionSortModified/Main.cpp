@@ -137,8 +137,6 @@ vector<int> insertionSort(vector<int> toSort) {
     return toSort;
 }
 
-
-
 // Insertion sort using binary search instead of a linear search
 vector<int> insertionSortBinary(vector<int> toSort) {
 
