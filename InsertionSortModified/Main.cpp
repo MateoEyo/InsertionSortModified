@@ -7,6 +7,8 @@ Insertion Sort modified to use binary search instead of linear search when inser
 #include <vector>
 #include <math.h>
 #include <stdlib.h>
+#include <chrono>
+#include <fstream>
 using namespace std;
 
 int getTotal();
@@ -40,19 +42,50 @@ int main() {
             }
         }
         
+        // Run insertion sort and calculate time
+        auto beginInsertion = chrono::high_resolution_clock::now();
         sortedInsertion = insertionSort(preSortArray);
-        sortedBinary = insertionSortBinary(preSortArray);
-        for (int i = 0; i < preSortArray.size(); i++) {
-            cout << preSortArray[i] << endl;
-        }
-        for (int i = 0; i < sortedBinary.size(); i++) {
-            cout << sortedBinary[i] << endl;
-        }
+        auto endInsertion = chrono::high_resolution_clock::now();
+        auto insertionElapsed = chrono::duration_cast<chrono::nanoseconds>(endInsertion - beginInsertion);
 
+        // Run insertion sort with binary and calculate time
+        auto beginBinary = chrono::high_resolution_clock::now();
+        sortedBinary = insertionSortBinary(preSortArray);
+        auto endBinary = chrono::high_resolution_clock::now();
+        auto binaryElapsed = chrono::duration_cast<chrono::nanoseconds>(endBinary - beginBinary);
+
+        // Print out arrays to text files for manual validation
+        ofstream preSortFile;
+        preSortFile.open(to_string(total) + "_preSort_total.txt");
+        for (int i = 0; i < total; i++) {
+            preSortFile << preSortArray[i] << endl;
+        }
+        preSortFile.close();
+
+        ofstream insertionFile;
+        insertionFile.open(to_string(total) + "_insertion_total.txt");
+        for (int i = 0; i < total; i++) {
+            insertionFile << sortedInsertion[i] << endl;
+        }
+        insertionFile.close();
+
+        ofstream binaryFile;
+        binaryFile.open(to_string(total) + "_binary_total.txt");
+        for (int i = 0; i < total; i++) {
+            binaryFile << sortedBinary[i] << endl;
+        }
+        binaryFile.close();
+
+        // Print out execution time for both sorts
+        cout << "Execution time for insertion sort is " + to_string(insertionElapsed.count()) << endl;
+        cout << "Execution time for insertion sort with binary is " + to_string(binaryElapsed.count()) << endl;
+
+        // Clear out vectors to avoid possible memory issues
         sortedInsertion.clear();
+        sortedBinary.clear();
         preSortArray.clear();
 
-        cout << "Type 1 to continue sorting with a new array or 0 to stop. ";
+        cout << "\nType 1 to continue sorting with a new array or 0 to stop. ";
         cin >> keepGoing;
     } while (keepGoing);
 
@@ -137,16 +170,12 @@ int binarySearch(vector<int> toSort, int value, int lower, int higher) {
     int midpoint = 0;
 
     while (lower <= higher) {
-        if (higher == lower) {
+        if (higher <= lower) {
             // Working on this project helped me find out about the "ternary operator" that is in use below
             return (value > toSort[lower]) ? (lower + 1) : lower;
         }
 
-        midpoint = floor((lower + higher) / 2);
-
-        if (value == toSort[midpoint]) {
-            return midpoint + 1;
-        }
+        midpoint = ceil((lower + higher) / 2);
 
         if (value > toSort[midpoint]) {
             lower = midpoint + 1;
