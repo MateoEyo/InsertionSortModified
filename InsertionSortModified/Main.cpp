@@ -25,7 +25,7 @@ int main() {
     vector<int> sortedInsertion;
     vector<int> sortedBinary;
 
-    cout << "*** Welcome to Insertion Sort! This insertion sort will look at integers between 1 and 1,000. ***" << endl;
+    cout << "*** Welcome to Insertion Sort! This insertion sort will look at integers between 1 and 100,000. ***" << endl;
 
     // Run until the user wants to stop
     do {
@@ -38,7 +38,7 @@ int main() {
             preSortArray.resize(total);
             sortedInsertion.resize(total);
             for (int i = 0; i < total; i++) {
-                preSortArray[i] = (rand() % 1000) + 1;
+                preSortArray[i] = (rand() % 100000) + 1;
             }
         }
         
@@ -46,13 +46,13 @@ int main() {
         auto beginInsertion = chrono::high_resolution_clock::now();
         sortedInsertion = insertionSort(preSortArray);
         auto endInsertion = chrono::high_resolution_clock::now();
-        auto insertionElapsed = chrono::duration_cast<chrono::nanoseconds>(endInsertion - beginInsertion);
+        auto insertionElapsed = chrono::duration_cast<chrono::microseconds>(endInsertion - beginInsertion);
 
         // Run insertion sort with binary and calculate time
         auto beginBinary = chrono::high_resolution_clock::now();
         sortedBinary = insertionSortBinary(preSortArray);
         auto endBinary = chrono::high_resolution_clock::now();
-        auto binaryElapsed = chrono::duration_cast<chrono::nanoseconds>(endBinary - beginBinary);
+        auto binaryElapsed = chrono::duration_cast<chrono::microseconds>(endBinary - beginBinary);
 
         // Print out arrays to text files for manual validation
         ofstream preSortFile;
@@ -78,6 +78,7 @@ int main() {
 
         // Print out execution time for both sorts
         cout << "Execution time for insertion sort is " + to_string(insertionElapsed.count()) << endl;
+
         cout << "Execution time for insertion sort with binary is " + to_string(binaryElapsed.count()) << endl;
 
         // Clear out vectors to avoid possible memory issues
@@ -168,10 +169,6 @@ int binarySearch(vector<int> toSort, int value, int lower, int higher) {
     int midpoint = 0;
 
     while (lower <= higher) {
-        if (higher <= lower) {
-            // Working on this project helped me find out about the "ternary operator" that is in use below
-            return (value > toSort[lower]) ? (lower + 1) : lower;
-        }
 
         midpoint = ceil((lower + higher) / 2);
 
@@ -180,6 +177,11 @@ int binarySearch(vector<int> toSort, int value, int lower, int higher) {
         }
         else {
             higher = midpoint - 1;
+        }
+
+        if (higher <= lower) {
+            // Working on this project helped me find out about the "ternary operator" that is in use below
+            return (value > toSort[lower]) ? (lower + 1) : lower;
         }
     }
 }
