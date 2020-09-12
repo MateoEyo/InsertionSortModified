@@ -99,7 +99,10 @@ int main() {
     return 0;
 }
 
-// Gets and validates input from user for total number of preSortArray
+
+/**
+* Gets and validates input from user for total number of preSortArray
+*/
 int getTotal() {
 
     string input;
@@ -123,7 +126,11 @@ int getTotal() {
     }
 }
 
-// Utilize insertion sort to sort given array
+/**
+* Uses insertion sort to sort an unsorted array
+* 
+* @param toSort A vector containing an array of positive integer elements
+*/
 vector<int> insertionSort(vector<int> toSort) {
 
     int value;
@@ -143,7 +150,11 @@ vector<int> insertionSort(vector<int> toSort) {
     return toSort;
 }
 
-// Insertion sort using binary search instead of a linear search
+/**
+* Uses insertion sort with a binary search to sort an unsorted array
+*
+* @param toSort A vector containing an array of positive integer elements
+*/
 vector<int> insertionSortBinary(vector<int> toSort) {
 
     int value;
@@ -168,7 +179,14 @@ vector<int> insertionSortBinary(vector<int> toSort) {
     return toSort;
 }
 
-// Binary search function that finds the position where the 'value' should be inserted recursively
+/**
+* Searches through a sorted array to find the location where the value currently being sorted should be placed in
+*
+* @param toSort A vector containing an array of positive integer elements
+* @param value  The positive integer that needs to be sorted *into* the sorted array
+* @param lower  The lower bound of the sorted array
+* @param higher The higher bound of the sorted array
+*/
 int binarySearch(vector<int> toSort, int value, int lower, int higher) {
 
     int midpoint = 0;
