@@ -19,13 +19,14 @@ int binarySearch(vector<int> toSort, int value, int lower, int higher);
 // Begin the program
 int main() {
 
-    bool keepGoing = false;
+    bool keepGoing = true;
+    string goingStr = "";
     int total = 0;
     vector<int> preSortArray;
     vector<int> sortedInsertion;
     vector<int> sortedBinary;
 
-    cout << "*** Welcome to Insertion Sort! This insertion sort will look at integers between 1 and 100,000. ***" << endl;
+    cout << "*** Welcome to Insertion Sort! This insertion sort will sort integers between 1 and 100,000. ***" << endl;
 
     // Run until the user wants to stop
     do {
@@ -47,6 +48,7 @@ int main() {
         sortedInsertion = insertionSort(preSortArray);
         auto endInsertion = chrono::high_resolution_clock::now();
         auto insertionElapsed = chrono::duration_cast<chrono::microseconds>(endInsertion - beginInsertion);
+
 
         // Run insertion sort with binary and calculate time
         auto beginBinary = chrono::high_resolution_clock::now();
@@ -77,9 +79,11 @@ int main() {
         binaryFile.close();
 
         // Print out execution time for both sorts
-        cout << "Execution time for insertion sort is " + to_string(insertionElapsed.count()) << endl;
+        cout << "Execution time for insertion sort is " + to_string(insertionElapsed.count()) + " microseconds or " + 
+            to_string(insertionElapsed.count() / 1000000) << + " seconds." << endl;
 
-        cout << "Execution time for insertion sort with binary is " + to_string(binaryElapsed.count()) << endl;
+        cout << "Execution time for insertion sort with binary search is " + to_string(binaryElapsed.count()) + " microseconds or " 
+            + to_string(binaryElapsed.count() / 1000000) << + " seconds." << endl;
 
         // Clear out vectors to avoid possible memory issues
         sortedInsertion.clear();
@@ -87,7 +91,8 @@ int main() {
         preSortArray.clear();
 
         cout << "\nType 1 to continue sorting with a new array or 0 to stop. ";
-        cin >> keepGoing;
+        cin >> goingStr;
+        keepGoing = (goingStr != "1") ? false : true;
     } while (keepGoing);
 
     // End of program
