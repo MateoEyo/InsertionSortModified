@@ -2,7 +2,7 @@
 <h2>What I do</h2>
 I ask you for any positive integer and I use that number as the total number of randomn positive integers in an array. After I create the array of random positive integers, I will then sort it! I also print out to a text file each array, so you get a text file containing the pre sorted array, the linearly sorted array, and the binary sorted array.
 
-<h2>How do I sort it?></h2>
+<h2>How do I sort it?</h2>
 I'm glad you asked! I use Insertion Sort. You probably already knew that though. Although I actually sort the array twice! I use Insertion Sort once with a linear search where I check every value linearly for the exact spot I need to put a value down in. I then use Insertion Sort again with a binary search, wherein I check the midpoint of the sorted part of the array and see if I need to move left or right to find the exact spot to put down the value.
 
 <h2>How do you use me?</h2>
